@@ -61,7 +61,7 @@ async fn main() -> anyhow::Result<()> {
         let all_signers = all_signers.clone();
         let lock = lock.clone();
         tokio::spawn(async move {
-            let block = tryhard::retry_fn(|| {
+            if let Ok(block) = tryhard::retry_fn(|| {
                 rpc_client.call(methods::block::RpcBlockRequest {
                     block_reference: BlockReference::BlockId(BlockId::Height(height)),
                 })
@@ -69,11 +69,12 @@ async fn main() -> anyhow::Result<()> {
             .retries(20)
             .fixed_backoff(Duration::from_millis(100))
             .await
-            .unwrap();
+            {
+                handle_block(block, &rpc_client, all_signers.clone()).await;
+            }
 
-            handle_block(block, &rpc_client, all_signers.clone()).await;
-            if (height - block_height + block_count) % 100 == 0 {
-                println!("remaining: {}", height - block_height + block_count);
+            if (height + block_count - block_height) % 100 == 0 {
+                println!("remaining: {}", height + block_count - block_height);
             }
             let mut lock = lock.write();
             *lock -= 1;
@@ -107,7 +108,7 @@ async fn handle_block(
 ) {
     let near: AccountId = "near".parse().unwrap();
     for chunk in block.chunks {
-        let chunk = tryhard::retry_fn(|| {
+        if let Ok(chunk) = tryhard::retry_fn(|| {
             rpc_client.call(methods::chunk::RpcChunkRequest {
                 chunk_reference: ChunkReference::ChunkHash {
                     chunk_id: chunk.chunk_hash,
@@ -117,22 +118,23 @@ async fn handle_block(
         .retries(20)
         .fixed_backoff(Duration::from_millis(100))
         .await
-        .unwrap();
-        for transaction in chunk.transactions {
-            if !transaction.signer_id.as_str().ends_with(".near") {
-                continue;
-            }
-            if !transaction.signer_id.is_sub_account_of(&near) {
-                continue;
-            }
-            if transaction.signer_id.as_str().contains("relayer") {
-                continue;
-            }
-            if transaction.signer_id.as_str().contains("oracle") {
-                continue;
-            }
-            if !all_signers.read().contains(&transaction.signer_id) {
-                all_signers.write().insert(transaction.signer_id);
+        {
+            for transaction in chunk.transactions {
+                if !transaction.signer_id.as_str().ends_with(".near") {
+                    continue;
+                }
+                if !transaction.signer_id.is_sub_account_of(&near) {
+                    continue;
+                }
+                if transaction.signer_id.as_str().contains("relayer") {
+                    continue;
+                }
+                if transaction.signer_id.as_str().contains("oracle") {
+                    continue;
+                }
+                if !all_signers.read().contains(&transaction.signer_id) {
+                    all_signers.write().insert(transaction.signer_id);
+                }
             }
         }
     }
