@@ -59,7 +59,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "ad"
+name = "ad-accounts"
 version = "0.1.0"
 dependencies = [
  "anyhow",

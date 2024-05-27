@@ -1,0 +1,16 @@
+[package]
+name = "ad-accounts"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow.workspace = true
+chrono.workspace = true
+near-jsonrpc-client.workspace = true
+near-jsonrpc-primitives.workspace = true
+near-primitives.workspace = true
+near-workspaces.workspace = true
+num_cpus.workspace = true
+parking_lot.workspace = true
+tokio.workspace = true
+tryhard.workspace = true

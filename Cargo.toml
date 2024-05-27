@@ -1,9 +1,8 @@
-[package]
-name = "ad"
-version = "0.1.0"
-edition = "2021"
+[workspace]
+members = ["crates/*"]
+resolver = "2"
 
-[dependencies]
+[workspace.dependencies]
 anyhow = "1"
 chrono = "0.4"
 near-jsonrpc-client = "0.9"
