@@ -47,7 +47,7 @@ async fn main() -> anyhow::Result<()> {
     let lock = Arc::new(RwLock::new(0));
     for height in ((block_height - block_count + 1)..block_height).rev() {
         loop {
-            if *lock.read() + 1 == cpus * 2 {
+            if *lock.read() + 1 == cpus * 4 {
                 sleep(Duration::from_millis(100)).await;
             } else {
                 break;
