@@ -5,6 +5,7 @@ resolver = "2"
 [workspace.dependencies]
 anyhow = "1"
 chrono = "0.4"
+near-contract-standards = "5"
 near-jsonrpc-client = "0.9"
 near-jsonrpc-primitives = "0.21"
 near-primitives = "0.21"
@@ -13,3 +14,18 @@ num_cpus = "1"
 parking_lot = "0.12"
 tokio = { version = "1", features = ["full"] }
 tryhard = "0.5"
+
+[workspace.dependencies.near-sdk]
+version = "5"
+default-features = false
+features = ["unstable"]
+
+[profile]
+[profile.release]
+codegen-units = 1
+opt-level = 3
+lto = true
+debug = false
+panic = "abort"
+overflow-checks = true
+strip = "symbols"
