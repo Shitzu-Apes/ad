@@ -6,10 +6,11 @@ edition = "2021"
 [dependencies]
 anyhow = "1"
 chrono = "0.4"
-futures = "0.3"
 near-jsonrpc-client = "0.9"
 near-jsonrpc-primitives = "0.21"
 near-primitives = "0.21"
 near-workspaces = { version = "0.10", features = ["unstable"] }
+num_cpus = "1"
 parking_lot = "0.12"
 tokio = { version = "1", features = ["full"] }
+tryhard = "0.5"
