@@ -85,6 +85,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "ad-send"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "dotenv",
+ "near-workspaces",
+ "parking_lot 0.12.3",
+ "reqwest 0.12.4",
+ "serde",
+ "serde_json",
+ "tokio",
+ "tryhard",
+]
+
+[[package]]
 name = "ad-token"
 version = "1.0.0"
 dependencies = [
@@ -1258,6 +1273,12 @@ name = "dmsort"
 version = "1.0.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f0bc8fbe9441c17c9f46f75dfe27fa1ddb6c68a461ccaed0481419219d4f10d3"
+
+[[package]]
+name = "dotenv"
+version = "0.15.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "77c90badedccf4105eca100756a0b1289e191f6fcbdadd3cee1d2f614f97da8f"
 
 [[package]]
 name = "dyn-clone"
