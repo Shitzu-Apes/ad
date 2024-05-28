@@ -45,7 +45,12 @@ impl Contract {
 impl FungibleTokenCore for Contract {
     #[payable]
     fn ft_transfer(&mut self, receiver_id: AccountId, amount: U128, memo: Option<String>) {
-        env::panic_str("unimplemented");
+        FtMint {
+            owner_id: &receiver_id,
+            amount: DEFAULT_AMOUNT,
+            memo: Some("Shitzu ad token"),
+        }
+        .emit();
     }
 
     #[payable]
